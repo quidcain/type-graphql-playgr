@@ -12,6 +12,7 @@ async function bootstrap() {
   // build TypeGraphQL executable schema
   const schema = await buildSchema({
     resolvers: [FriendsResolver],
+    directives: [AuthorizedDirective.getDirectiveDeclaration("authorized")]
   });
 
   SchemaDirectiveVisitor.visitSchemaDirectives(schema, {

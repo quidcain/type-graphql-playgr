@@ -5,8 +5,10 @@ import {
   GraphQLInputField,
   GraphQLInterfaceType,
   GraphQLObjectType,
+  GraphQLDirective,
+  DirectiveLocation,
+  GraphQLString,
 } from "graphql";
-
 import { SchemaDirectiveVisitor } from "graphql-tools";
 
 export class AuthorizedDirective extends SchemaDirectiveVisitor {
@@ -65,6 +67,25 @@ export class AuthorizedDirective extends SchemaDirectiveVisitor {
 
         return resolve.apply(this, args);
       };
+    });
+  }
+
+  static getDirectiveDeclaration(
+    name: string,
+  ) {
+    return new GraphQLDirective({
+      name,
+      locations: [
+        DirectiveLocation.FIELD_DEFINITION,
+        DirectiveLocation.INPUT_FIELD_DEFINITION,
+        DirectiveLocation.OBJECT,
+      ],
+      args: {
+        requires: {
+          type: GraphQLString,
+          defaultValue: 'admin',
+        }
+      }
     });
   }
 }
